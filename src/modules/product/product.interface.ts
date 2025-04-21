@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { IAttachmentType, ICategory } from '../category/category.interface';
 import { UserDocument } from 'src/DB/models/user.model';
+import { IUser } from '../user/user.interface';
 
 export enum Size {
   S = 's',
@@ -13,40 +14,22 @@ export enum Size {
 
 export interface IProductInput {
   name: string;
-
   description: string;
-
   stock: number;
   originalPrice: number;
   discountPercent?: number; // %
-
   size?: Size[];
   colors?: string[];
-
   categoryId: Types.ObjectId | ICategory;
 }
 export interface IProduct extends IProductInput {
-  // _id: Types.ObjectId;
-
-  //   name: string;
+  _id: Types.ObjectId;
   slug: string;
-  //   description: string;
-
-  //   stock: number;
-  //   originalPrice: number;
-  //   discountPercent?: number; // %
   finalPrice: number;
-
-  //   size?: Size[];
-  //   colors?: string[];
   folderId: string;
-
   image: IAttachmentType;
   gallery?: IAttachmentType[];
-
-  createdBy: Types.ObjectId | UserDocument;
-  //   categoryId: Types.ObjectId | ICategory;
-
+  createdBy: Types.ObjectId | IUser;
   createAt?: Date;
   updatedAt?: Date;
 }

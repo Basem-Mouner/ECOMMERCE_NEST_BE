@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
 import { ProductDocument } from 'src/DB/models/product.model';
+import { IUser } from '../user/user.interface';
+import { IProduct } from '../product/product.interface';
 
 export enum PaymentMethod {
   cash = 'cash',
@@ -23,7 +25,7 @@ export interface IOrderProduct {
   quantity: number;
   unitPrice: number;
   finalPrice: number;
-  productId: Types.ObjectId;
+  productId: Types.ObjectId | IProduct;
 }
 
 export interface IOrder extends IOrderInputs {
@@ -37,8 +39,10 @@ export interface IOrder extends IOrderInputs {
   finalPrice: number;
   orderId: string;
   intentId?: string;
-  createdBy?: Types.ObjectId;
-  updatedBy?: Types.ObjectId;
+  createdBy?: Types.ObjectId | IUser;
+  createdAt?: Date;
+  updatedBy?: Types.ObjectId | IUser;
+  updatedAt?: Date;
 }
 export interface IOrderInputs {
   address: string;

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserDocument } from 'src/DB/models/user.model';
 import {
   CreateProductDto,
@@ -15,10 +15,14 @@ import { CategoryDocument } from 'src/DB/models/category.model';
 import { findProductFilterDto } from './dto/find.product.dto';
 import { ProductDocument } from 'src/DB/models/product.model';
 import { IPagination } from 'src/DB/repository/DataBase.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { object } from 'zod';
 
 @Injectable()
 export class ProductService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache, //for caching
     private readonly productRepositoryService: ProductRepositoryService,
     private readonly categoryRepositoryService: CategoryRepositoryService,
     private readonly cloudService: CloudService,
@@ -158,6 +162,17 @@ export class ProductService {
     message: string;
     data: { products: [] | ProductDocument[] | IPagination<ProductDocument> };
   }> {
+    let cashName: string = 'products';
+    if (Object.keys(query)?.length) {
+      cashName = `products-${JSON.stringify(query)}`;
+    }
+    const cashData = await this.cacheManager.get(cashName);
+    if (cashData) {
+      return {
+        message: 'Products cashed found successfully',
+        data: { products: JSON.parse(cashData as string) },
+      };
+    }
     let filter: FilterQuery<ProductDocument> = {};
     if (query?.name) {
       filter = {
@@ -189,6 +204,8 @@ export class ProductService {
       page: query.page,
       populate: [{ path: 'categoryId' }],
     });
+    await this.cacheManager.set(cashName, JSON.stringify(products), 9000);
+    // }
 
     return { message: 'Products found successfully', data: { products } };
   }

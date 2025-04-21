@@ -1,12 +1,14 @@
 import {
   MongooseModule,
   Prop,
+  raw,
   Schema,
   SchemaFactory,
   Virtual,
 } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { generateHash } from 'src/common/security/hash.secure';
+import { IAttachmentType } from 'src/modules/category/category.interface';
 
 export enum GenderTypes {
   male = 'male',
@@ -76,8 +78,18 @@ export class User {
   @Prop({ type: Date })
   changeCredentialsTime: Date;
 
-  @Prop({ type: [OtpEntry], default: [] }) // Array of OTP objects
+  @Prop({ type: [OtpEntry] }) // Array of OTP objects
   OTP: OtpEntry[];
+  @Prop(
+    raw({
+      public_id: { type: String },
+      secure_url: { type: String },
+    }),
+  )
+  image: IAttachmentType;
+
+  @Prop({ type: Date })
+  DOB: Date;
 }
 
 export type UserDocument = HydratedDocument<User>; //return document type contain document&User

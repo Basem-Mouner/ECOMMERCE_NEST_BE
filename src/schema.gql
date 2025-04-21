@@ -1,0 +1,141 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type IAttachmentTypeResponse {
+  public_id: String
+  secure_url: String
+}
+
+type OtpEntryResponse {
+  code: String!
+  type: String!
+  expiresAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type oneUserResponse {
+  firstName: String!
+  lastName: String!
+  userName: String
+  email: String!
+  password: String!
+  phone: String
+  address: String
+  gender: GenderTypes!
+  role: RoleTypes!
+  image: IAttachmentTypeResponse
+  DOB: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime
+  confirmEmail: DateTime
+  changeCredentialsTime: DateTime
+  OTP: [OtpEntryResponse!]
+}
+
+enum GenderTypes {
+  male
+  female
+}
+
+enum RoleTypes {
+  user
+  admin
+}
+
+type OneCategoryResponse {
+  _id: String!
+  name: String!
+  slug: String!
+  folderId: String!
+  catImage: IAttachmentTypeResponse!
+  createdBy: oneUserResponse!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type OneProductResponse {
+  _id: ID
+  name: String!
+  stock: Float!
+  finalPrice: Float!
+  slug: String!
+  folderId: String!
+  image: IAttachmentTypeResponse!
+  gallery: [IAttachmentTypeResponse!]
+  createdBy: oneUserResponse!
+  createAt: ID
+  updatedAt: DateTime
+  originalPrice: Float!
+  discountPercent: Float
+  description: String!
+  categoryId: OneCategoryResponse!
+  size: [Size!]
+  colors: [String!]
+}
+
+enum Size {
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+}
+
+type OneOrderResponse {
+  _id: ID
+  address: String!
+  note: String
+  discountPercent: Float
+  finalPrice: Float!
+  status: OrderStatus!
+  subTotal: Float!
+  intentId: String
+  orderId: String!
+  createdAt: DateTime!
+  createdBy: oneUserResponse!
+  updatedBy: ID
+  updatedAt: DateTime
+  phone: String!
+  rejectedReason: String
+  paidAt: DateTime
+  paymentMethod: PaymentMethod!
+  products: [IOrderProductResponse!]!
+}
+
+enum OrderStatus {
+  pending
+  placed
+  onWay
+  delivered
+  canceled
+  pickup
+}
+
+enum PaymentMethod {
+  cash
+  card
+}
+
+type IOrderProductResponse {
+  _id: ID
+  productId: OneProductResponse!
+  name: String!
+  quantity: Float!
+  unitPrice: Float!
+  finalPrice: Float!
+}
+
+type Query {
+  """Get all orders"""
+  allOrders(inputFilter: FilterOrderDto): [OneOrderResponse!]!
+}
+
+input FilterOrderDto {
+  status: OrderStatus
+}

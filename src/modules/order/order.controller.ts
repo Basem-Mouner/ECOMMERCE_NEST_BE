@@ -51,10 +51,10 @@ export class OrderController {
     return this.orderService.cancelOrder(user, params.orderId);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.orderService.findAll();
-  // }
+  @Get()
+  findAllOrder() {
+    return this.orderService.findAllOrder();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

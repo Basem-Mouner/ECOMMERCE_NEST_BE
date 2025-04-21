@@ -15,8 +15,8 @@ import { IProduct, Size } from 'src/modules/product/product.interface';
 
 @Schema({ timestamps: true })
 export class Product implements IProduct {
-  // @Prop({ type: Types.ObjectId })
-  // _id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
   @Prop({ unique: false, minlength: 2, maxlength: 50 })
   name: string;
 

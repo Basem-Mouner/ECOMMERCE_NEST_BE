@@ -28,6 +28,7 @@ import {
   updateProductFileDto,
 } from './dto/update.dto';
 import { findProductFilterDto } from './dto/find.product.dto';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 @UsePipes(
   new ValidationPipe({
@@ -91,6 +92,8 @@ export class ProductController {
       params.productId,
     );
   }
+  @UseInterceptors(CacheInterceptor) //only valid for get method
+  @CacheTTL(5) //cash time to live have permission to override the global cache time by seconds
   @Get()
   @Auth([...Object.values(RoleTypes)])
   listFilter(@Query() query: findProductFilterDto) {

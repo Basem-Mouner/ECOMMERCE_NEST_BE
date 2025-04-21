@@ -33,6 +33,14 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-assignment': 'off', // تعطيل تحذير unsafe assignment
       '@typescript-eslint/no-unsafe-return': 'off', // تعطيل تحذير unsafe return
       '@typescript-eslint/no-unused-vars': 'off', // تعطيل تحذير unused vars
+      'no-unused-vars': 'off', // تعطيل تحذير unused vars
+        // Allow trailing spaces
+    'no-trailing-spaces': 'off', // or 0
+
+    // Allow more than two consecutive empty lines (e.g., up to 5)
+    'no-multiple-empty-lines': ['warn', { max: 5 }],
+
+    // You might have other rules configured here
     },
   },
 );

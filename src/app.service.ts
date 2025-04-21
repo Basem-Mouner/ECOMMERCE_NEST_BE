@@ -7,6 +7,6 @@ export class AppService {
   }
 
   sayHi(): string {
-    return 'Hi node and typescript! with NestJS';
+    return 'Hello in my E-commerce API app';
   }
 }

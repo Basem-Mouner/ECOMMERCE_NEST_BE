@@ -9,6 +9,7 @@ import { Request } from 'express';
 import { TokenService } from 'src/common/security/service/token.service';
 import { UserDocument } from 'src/DB/models/user.model';
 import { IClientAuthSocket } from 'src/modules/gateway/gateway';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 export interface IAuthRequest extends Request {
   user: UserDocument; // Use a specific type instead of `any` if possible (e.g., `UserDocument`)
@@ -40,6 +41,17 @@ export class AuthenticationGuard implements CanActivate {
         }
         context.switchToHttp().getRequest<IAuthRequest>().user =
           await this.tokenService.verify({ authorization });
+        break;
+      case 'graphql':
+        authorization = GqlExecutionContext.create(context).getContext<{
+          req: Request;
+        }>().req.headers.authorization;
+        if (!authorization) {
+          throw new UnauthorizedException('Authorization header missing');
+        }
+        GqlExecutionContext.create(context).getContext<{
+          req: IAuthRequest;
+        }>().req.user = await this.tokenService.verify({ authorization });
         break;
 
       default:

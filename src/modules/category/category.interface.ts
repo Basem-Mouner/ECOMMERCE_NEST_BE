@@ -1,13 +1,13 @@
 import { Types } from 'mongoose';
 
-import { UserDocument } from 'src/DB/models/user.model';
+import { IUser } from '../user/user.interface';
 
 export interface ICategory extends ICreateCategoryInput {
-  // _id: Types.ObjectId;
+  _id: Types.ObjectId;
   slug: string;
   folderId: string;
   catImage: IAttachmentType;
-  createdBy: Types.ObjectId | UserDocument;
+  createdBy: Types.ObjectId | IUser;
   createdAt?: Date;
   updatedAt?: Date;
 }

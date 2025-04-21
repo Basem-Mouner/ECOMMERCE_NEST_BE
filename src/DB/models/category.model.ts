@@ -14,6 +14,8 @@ import {
 
 @Schema({ timestamps: true })
 export class Category implements ICategory {
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
   @Prop({ required: true, minlength: 2, maxlength: 50, unique: true })
   name: string;
 

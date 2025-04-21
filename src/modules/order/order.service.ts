@@ -9,7 +9,12 @@ import { CartDocument } from 'src/DB/models/cart.model';
 import { CartRepositoryService } from 'src/DB/repository/cart.repository.service';
 import { UserRepositoryService } from 'src/DB/repository/user.repository.service';
 import { ProductRepositoryService } from 'src/DB/repository/product.repository.service';
-import { IOrderProduct, OrderStatus, PaymentMethod } from './order.interface';
+import {
+  IOrder,
+  IOrderProduct,
+  OrderStatus,
+  PaymentMethod,
+} from './order.interface';
 import { PaymentService } from 'src/common/services/payment.service';
 import { Types } from 'mongoose';
 import Stripe from 'stripe';
@@ -209,9 +214,13 @@ export class OrderService {
     return { Message: 'Done' };
   }
 
-  // findAll() {
-  //   return `This action returns all order`;
-  // }
+  async findAllOrder(): Promise<any> {
+    const orders = await this.orderRepositoryService.findAll({
+      filter: {},
+      populate: [{ path: 'createdBy' }, { path: 'products.productId' }],
+    });
+    return orders;
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} order`;

@@ -10,6 +10,7 @@ import { IAuthRequest } from '../authentication/authentication.guard';
 import { RoleTypes, UserDocument } from 'src/DB/models/user.model';
 import { rolesKey } from 'src/common/decorators/roles.decorators';
 import { IClientAuthSocket } from 'src/modules/gateway/gateway';
+import { GqlExecutionContext } from '@nestjs/graphql';
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
@@ -27,6 +28,11 @@ export class AuthorizationGuard implements CanActivate {
         break;
       case 'http':
         user = context.switchToHttp().getRequest<IAuthRequest>().user;
+        break;
+      case 'graphql':
+        user = GqlExecutionContext.create(context).getContext<{
+          req: IAuthRequest;
+        }>().req.user;
         break;
       default:
         return false;

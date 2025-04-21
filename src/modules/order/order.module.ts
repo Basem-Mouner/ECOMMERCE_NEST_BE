@@ -14,6 +14,7 @@ import { TokenService } from 'src/common/security/service/token.service';
 import { JwtService } from '@nestjs/jwt';
 import { PaymentService } from 'src/common/services/payment.service';
 import { RealTimeGateway } from '../gateway/gateway';
+import { OrderResolver } from './order.resolver';
 
 @Module({
   imports: [UserModel, CartModel, OrderModel, ProductModel],
@@ -29,6 +30,7 @@ import { RealTimeGateway } from '../gateway/gateway';
     JwtService,
     PaymentService,
     RealTimeGateway,
+    OrderResolver,
   ],
 })
 export class OrderModule {}
